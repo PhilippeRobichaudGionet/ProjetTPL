@@ -1,21 +1,28 @@
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
-import { useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import Slider from '@react-native-community/slider';
 
 export default function CameraScreen() {
   const [facing, setFacing] = useState('back');
+  const [autoFocus, setAutoFocus] = useState(true); // autofocus ON/OFF
+  const [zoom, setZoom] = useState(0);
   const [permission, requestPermission] = useCameraPermissions();
 
-  if (!permission) {
-    return <View />;
-  }
-
+  if (!permission) return <View />;
   if (!permission.granted) {
-    // Camera permissions are not granted yet.
     return (
       <View style={styles.container}>
-        <Text style={styles.message}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <Text style={styles.message}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermission} title="Grant permission" />
       </View>
     );
   }
@@ -24,13 +31,41 @@ export default function CameraScreen() {
     setFacing(current => (current === 'back' ? 'front' : 'back'));
   }
 
+  function toggleAutoFocus() {
+    setAutoFocus(prev => !prev);
+  }
+
   return (
     <View style={styles.container}>
-      <CameraView style={styles.camera} facing={facing}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-            <Text style={styles.text}>Flip Camera</Text>
+      <CameraView
+        style={styles.camera}
+        facing={facing}
+        zoom={zoom}
+        autoFocus={autoFocus ? 'on' : 'off'}
+      >
+        <View style={styles.controls}>
+          <TouchableOpacity onPress={toggleCameraFacing} style={styles.button}>
+            <Text style={styles.text}>Flip</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity onPress={toggleAutoFocus} style={styles.button}>
+            <Text style={styles.text}>
+              AutoFocus: {autoFocus ? 'ON' : 'OFF'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.zoomSlider}>
+          <Text style={styles.text}>Zoom: {(zoom * 100).toFixed(0)}%</Text>
+          <Slider
+            style={{ width: 200 }}
+            minimumValue={0}
+            maximumValue={1}
+            value={zoom}
+            onValueChange={value => setZoom(value)}
+            minimumTrackTintColor="#ffffff"
+            maximumTrackTintColor="#000000"
+          />
         </View>
       </CameraView>
     </View>
@@ -49,22 +84,30 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
-  buttonContainer: {
-    flex: 1,
+  controls: {
+    position: 'absolute',
+    bottom: 100,
+    width: '100%',
     flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
+    justifyContent: 'space-evenly',
+    backgroundColor: '#00000055',
+    paddingVertical: 10,
+  },
+  zoomSlider: {
+    position: 'absolute',
+    bottom: 30,
+    width: '100%',
+    alignItems: 'center',
+    backgroundColor: '#00000055',
+    paddingVertical: 10,
   },
   button: {
-    flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#ffffff44',
+    borderRadius: 8,
   },
   text: {
-    fontSize: 24,
-    fontWeight: 'bold',
     color: 'white',
+    fontSize: 16,
   },
 });
-
-
