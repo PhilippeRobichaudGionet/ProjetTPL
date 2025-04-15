@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, TextInput, Pressable, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Pressable, Text, StyleSheet, Alert } from 'react-native';
 import { PersonContext } from './PersonContext';
 
 export default function HomeScreen({ navigation }) {
@@ -8,7 +8,7 @@ export default function HomeScreen({ navigation }) {
     const { setPerson } = useContext(PersonContext);
 
     const handleLogin = () => {
-        if (nom && mdp === 'Verite') {
+        if (nom === 'Lina' && mdp === '123') {
             setPerson(prev => ({ ...prev, nom, motDePasse: mdp }));
             navigation.navigate('Main'); // vers la navigation avec onglets
         } else {
@@ -16,8 +16,12 @@ export default function HomeScreen({ navigation }) {
         }
     };
 
+    const handleForgotPassword = () => {
+        alert("Info \nNom: Lina\nMot de passe: 123");
+    };
+
     return (
-        <View style={[styles.container,{ backgroundColor: '#eee' }]}>
+        <View style={[styles.container, { backgroundColor: '#eee' }]}>
             <TextInput placeholder="Nom" style={styles.input} onChangeText={setNom} />
             <TextInput
                 placeholder="Mot de passe"
@@ -25,10 +29,14 @@ export default function HomeScreen({ navigation }) {
                 secureTextEntry
                 onChangeText={setMdp}
             />
+
+            <Pressable onPress={handleForgotPassword}>
+                <Text style={styles.forgot}>Mot de passe oublié ?</Text>
+            </Pressable>
+
             <Pressable onPress={handleLogin} style={styles.btn}>
                 <Text style={styles.btnText}>Se connecter</Text>
             </Pressable>
-            <Text style={styles.nomAffiche}>{nom ? `Nom : ${nom}` : ''}</Text>
         </View>
     );
 }
@@ -50,5 +58,10 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     btnText: { color: '#fff' },
-    nomAffiche: { marginTop: 20 },
+    forgot: {
+        color: '#007AFF',
+        textDecorationLine: 'underline',
+        marginTop: -5,
+        marginBottom: 10,
+    },
 });
