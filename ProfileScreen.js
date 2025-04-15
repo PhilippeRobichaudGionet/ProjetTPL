@@ -1,19 +1,19 @@
 import React, { useContext } from 'react';
 import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
-import { PersonContext } from './PersonContext';
+import { ProfilContext } from './ProfilContext';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function ProfileScreen({ navigation }) {
-  const { person } = useContext(PersonContext);
+  const { User, setUser } = useContext(ProfilContext);
 
   return (
-    <View style={[styles.container, { backgroundColor: person.couleur }]}>
-      <Text style={styles.nom}>Nom : {person.nom}</Text>
+    <View style={[styles.container, { backgroundColor: User.couleur }]}>
+      <Text style={styles.nom}>Nom : {User.nom}</Text>
       <Image
         source={
-          person.image
-            ? { uri: person.image }
-            : require('./assets/avatar.png') // image par défaut
+          User.image
+            ? { uri: User.image }
+            : require('./assets/avatar.png')
         }
         style={styles.image}
       />

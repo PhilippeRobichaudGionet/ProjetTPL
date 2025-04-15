@@ -1,16 +1,16 @@
 import React, { useState, useContext } from 'react';
 import { View, TextInput, Pressable, Text, StyleSheet, Alert } from 'react-native';
-import { PersonContext } from './PersonContext';
+import { ProfilContext } from './ProfilContext';
 
 export default function HomeScreen({ navigation }) {
     const [nom, setNom] = useState('');
     const [mdp, setMdp] = useState('');
-    const { setPerson } = useContext(PersonContext);
+    const { setUser } = useContext(ProfilContext);
 
     const handleLogin = () => {
         if (nom === 'Lina' && mdp === '123') {
-            setPerson(prev => ({ ...prev, nom, motDePasse: mdp }));
-            navigation.navigate('Main'); // vers la navigation avec onglets
+            setUser(prev => ({ ...prev, nom, motDePasse: mdp }));
+            navigation.navigate('Main');
         } else {
             alert("Nom ou mot de passe incorrect");
         }

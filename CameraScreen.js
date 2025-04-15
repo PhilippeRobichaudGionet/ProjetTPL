@@ -11,7 +11,7 @@ import Slider from '@react-native-community/slider';
 
 export default function CameraScreen() {
   const [facing, setFacing] = useState('back');
-  const [autoFocus, setAutoFocus] = useState(true); // autofocus ON/OFF
+  const [autoFocus, setAutoFocus] = useState(true);
   const [zoom, setZoom] = useState(0);
   const [permission, requestPermission] = useCameraPermissions();
 
@@ -20,7 +20,7 @@ export default function CameraScreen() {
     return (
       <View style={styles.container}>
         <Text style={styles.message}>
-          We need your permission to show the camera
+          Nous avons besoins de votre accord pour utiliser votre camera
         </Text>
         <Button onPress={requestPermission} title="Grant permission" />
       </View>
